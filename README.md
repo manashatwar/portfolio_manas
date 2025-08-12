@@ -1,2 +1,2 @@
-https://vercel.com/manashatwars-projects/portfolio-manas-7h9f
+https://portfolio-manas-7h9f.vercel.app/
 
