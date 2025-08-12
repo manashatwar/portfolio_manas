@@ -1,1 +1,2 @@
-[# actualmanasportfolio](https://dulcet-panda-47d0d9.netlify.app/)
+https://vercel.com/manashatwars-projects/portfolio-manas-7h9f
+
