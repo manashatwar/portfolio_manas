@@ -1,5 +1,7 @@
 "use client"
 
+
+import { useMemo } from "react"
 import { motion } from "framer-motion"
 import { Shield, Zap, Globe, Code, Database, FileText } from "lucide-react"
 
@@ -24,6 +26,17 @@ export default function FallbackVisualization({ onBlockClick, activeBlock }: Fal
     { icon: Shield, label: "Research", category: "research", color: "#8b5cf6", position: "top-[50%] left-[40%]" },
   ]
 
+
+  // Generate random particle data only once on the client to avoid hydration errors
+  const particles = useMemo(() => {
+    return Array.from({ length: 30 }, () => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 3 + Math.random() * 2,
+      delay: Math.random() * 2,
+    }))
+  }, [])
+
   return (
     <div className="w-full h-full relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
       {/* Animated background grid */}
@@ -33,22 +46,22 @@ export default function FallbackVisualization({ onBlockClick, activeBlock }: Fal
 
       {/* Floating particles */}
       <div className="absolute inset-0">
-        {[...Array(30)].map((_, i) => (
+        {particles.map((particle, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-orange-400 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
             }}
             animate={{
               y: [0, -20, 0],
               opacity: [0.3, 0.8, 0.3],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: particle.duration,
               repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 2,
+              delay: particle.delay,
             }}
           />
         ))}
