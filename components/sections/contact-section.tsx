@@ -2,11 +2,13 @@
 
 import type React from "react"
 
+
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Mail, MessageSquare, Calendar, Github, Linkedin, Twitter, Send, CheckCircle, AlertCircle } from "lucide-react"
 import { personalInfo } from "@/lib/data/personal-info"
+import { useForm, ValidationError } from "@formspree/react"
 
 export default function ContactSection() {
   const { ref, inView } = useInView({
@@ -14,57 +16,11 @@ export default function ContactSection() {
     triggerOnce: true,
   })
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-    // Clear error when user starts typing
-    if (error) setError(null)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setError(null)
-
-    try {
-      // Send email using a service like EmailJS, Formspree, or your own API
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to send message")
-      }
-
-      setIsSubmitted(true)
-      setFormData({ name: "", email: "", subject: "", message: "" })
-
-      // Reset success state after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false)
-      }, 5000)
-    } catch (err) {
-      setError("Failed to send message. Please try again or contact me directly via email.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  // Formspree integration
+  const [state, handleSubmit] = useForm("xzzvwdao")
+  const [name, setName] = useState("")
+  const [subject, setSubject] = useState("")
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -198,7 +154,7 @@ export default function ContactSection() {
               <div className="bg-slate-900/30 backdrop-blur-xl border border-slate-800/50 rounded-xl sm:rounded-2xl p-6 sm:p-8">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-slate-100">Send a Message</h3>
 
-                {isSubmitted ? (
+                {state.succeeded ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -212,17 +168,6 @@ export default function ContactSection() {
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                    {error && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 sm:p-4 flex items-center space-x-3"
-                      >
-                        <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0" />
-                        <p className="text-red-400 text-xs sm:text-sm">{error}</p>
-                      </motion.div>
-                    )}
-
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                       <div>
                         <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">
@@ -232,8 +177,8 @@ export default function ContactSection() {
                           type="text"
                           id="name"
                           name="name"
-                          value={formData.name}
-                          onChange={handleChange}
+                          value={name}
+                          onChange={e => setName(e.target.value)}
                           required
                           className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors text-sm sm:text-base"
                           placeholder="Your name"
@@ -247,12 +192,11 @@ export default function ContactSection() {
                           type="email"
                           id="email"
                           name="email"
-                          value={formData.email}
-                          onChange={handleChange}
                           required
                           className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors text-sm sm:text-base"
                           placeholder="your@email.com"
                         />
+                        <ValidationError prefix="Email" field="email" errors={state.errors} />
                       </div>
                     </div>
 
@@ -264,8 +208,8 @@ export default function ContactSection() {
                         type="text"
                         id="subject"
                         name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
+                        value={subject}
+                        onChange={e => setSubject(e.target.value)}
                         required
                         className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors text-sm sm:text-base"
                         placeholder="What's this about?"
@@ -279,23 +223,22 @@ export default function ContactSection() {
                       <textarea
                         id="message"
                         name="message"
-                        value={formData.message}
-                        onChange={handleChange}
                         required
                         rows={5}
                         className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors resize-none text-sm sm:text-base"
                         placeholder="Tell me about your project or question..."
                       />
+                      <ValidationError prefix="Message" field="message" errors={state.errors} />
                     </div>
 
                     <motion.button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={state.submitting}
                       className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-900 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:from-cyan-300 hover:to-blue-400 transition-all duration-300 inline-flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
-                      whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                      whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                      whileHover={{ scale: state.submitting ? 1 : 1.02 }}
+                      whileTap={{ scale: state.submitting ? 1 : 0.98 }}
                     >
-                      {isSubmitting ? (
+                      {state.submitting ? (
                         <>
                           <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
                           <span>Sending...</span>
