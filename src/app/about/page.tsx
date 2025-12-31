@@ -5,9 +5,13 @@ import { motion } from "framer-motion"
 import { Download } from "lucide-react"
 import { personalInfo } from "@/lib/data/personal-info"
 import HangingIdBadge from "@/components/about/HangingIdBadge"
+import { useAccount } from "wagmi"
+import { useAppKit } from "@reown/appkit/react"
 
 export default function About() {
     const containerRef = useRef(null)
+    const { isConnected } = useAccount()
+    const { open } = useAppKit()
 
     return (
         <div ref={containerRef} className="bg-saisei-dark text-saisei-light min-h-screen pt-32 pb-20 px-6">
@@ -42,18 +46,31 @@ export default function About() {
 
                     {/* Wallet Connect & CV Section */}
                     <div className="mt-8">
-                        <a
-                            href="https://drive.google.com/file/d/12WTU21iAw-zn8D4_1Qhn9a3OdVWJQfnN/view?usp=sharing"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center justify-between w-full p-4 border border-saisei-accent bg-saisei-accent/10 hover:bg-saisei-accent hover:text-white transition-colors"
-                        >
-                            <div className="flex flex-col text-left">
-                                <span className="font-sans text-sm uppercase tracking-widest">Download CV</span>
-                                <span className="text-[10px] font-mono opacity-60">PDF • 2.4 MB</span>
-                            </div>
-                            <Download size={16} />
-                        </a>
+                        {!isConnected ? (
+                            <button
+                                onClick={() => open()}
+                                className="group flex items-center justify-between w-full p-4 border border-saisei-accent bg-saisei-accent/10 hover:bg-saisei-accent hover:text-white transition-colors"
+                            >
+                                <div className="flex flex-col text-left">
+                                    <span className="font-sans text-sm uppercase tracking-widest">Download CV</span>
+                                    <span className="text-[10px] font-mono opacity-60 italic">Connect Wallet First</span>
+                                </div>
+                                <div className="w-2 h-2 rounded-full bg-saisei-accent group-hover:bg-white animate-pulse" />
+                            </button>
+                        ) : (
+                            <a
+                                href="https://drive.google.com/file/d/12WTU21iAw-zn8D4_1Qhn9a3OdVWJQfnN/view?usp=sharing"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex items-center justify-between w-full p-4 border border-saisei-accent bg-saisei-accent/10 hover:bg-saisei-accent hover:text-white transition-colors"
+                            >
+                                <div className="flex flex-col text-left">
+                                    <span className="font-sans text-sm uppercase tracking-widest">Download CV</span>
+                                    <span className="text-[10px] font-mono opacity-60">PDF • 2.4 MB</span>
+                                </div>
+                                <Download size={16} />
+                            </a>
+                        )}
                     </div>
                 </div>
 
