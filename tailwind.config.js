@@ -17,12 +17,23 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-manrope)", "sans-serif"],
+        serif: ["var(--font-bodoni)", "serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        saisei: {
+          light: "#F5F2EB",
+          dark: "#0D0D0D",
+          accent: "#C4A484",
+          muted: "#8C8C8C",
+          bronze: "#B08D74"
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

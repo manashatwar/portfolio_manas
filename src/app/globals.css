@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Saisei Light Theme (Cream/Beige) */
+    --background: 40 30% 94%; /* #F5F2EB */
+    --foreground: 0 0% 10%; /* #1A1A1A */
+    
+    --card: 40 30% 94%;
+    --card-foreground: 0 0% 10%;
+    
+    --popover: 40 30% 94%;
+    --popover-foreground: 0 0% 10%;
+    
+    --primary: 30 38% 36%; /* Saisei Bronze/Brown */
+    --primary-foreground: 40 30% 94%;
+    
+    --secondary: 40 10% 90%;
+    --secondary-foreground: 0 0% 10%;
+    
+    --muted: 0 0% 55%; /* #8C8C8C */
+    --muted-foreground: 0 0% 40%;
+    
+    --accent: 30 38% 64%; /* #C4A484 */
+    --accent-foreground: 0 0% 10%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 30 20% 80%;
+    --input: 30 20% 80%;
+    --ring: 30 38% 36%;
+    
+    --radius: 0rem; /* Saisei is sharp or slightly rounded, sticking to sharp/min for now */
+  }
+
+  .dark {
+    /* Saisei Dark Theme (Deep Black/Brown) */
+    --background: 0 0% 5%; /* #0D0D0D */
+    --foreground: 40 30% 94%;
+    
+    --card: 0 0% 5%;
+    --card-foreground: 40 30% 94%;
+    
+    --popover: 0 0% 5%;
+    --popover-foreground: 40 30% 94%;
+    
+    --primary: 30 38% 64%; /* Accent becomes primary in dark */
+    --primary-foreground: 0 0% 5%;
+    
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 40 30% 94%;
+    
+    --muted: 0 0% 40%;
+    --muted-foreground: 0 0% 60%;
+    
+    --accent: 30 38% 36%;
+    --accent-foreground: 40 30% 94%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 30 38% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Lenis Smooth Scroll or Custom */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
