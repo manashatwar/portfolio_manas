@@ -9,6 +9,14 @@ const nextConfig = {
   // experimental: {
   //   ppr: true,
   // },
+  transpilePackages: [
+    "@reown/appkit",
+    "@reown/appkit-adapter-wagmi",
+    "@reown/appkit-utils",
+    "@reown/appkit-scaffold-ui",
+    "@coinbase/cdp-sdk",
+    "@base-org/account"
+  ],
   images: {
     remotePatterns: [
       {
