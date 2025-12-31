@@ -4,28 +4,18 @@ import { useState } from "react"
 import HeroIntroOverlay from "../HeroIntroOverlay"
 import { motion } from "framer-motion"
 import { ChevronDown, Mail, Github, Linkedin, Twitter, ArrowRight } from "lucide-react"
-import dynamic from "next/dynamic"
+
 import Image from "next/image"
-const BlockchainVisualization = dynamic(() => import("@/components/3d/blockchain-visualization"), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-slate-900/20 animate-pulse rounded-lg flex items-center justify-center text-slate-500 font-mono text-xs">INITIALIZING BLOCKCHAIN...</div>
-})
+
 import NeonName from "./NeonName"
 import "./neon-name.css"
 import { personalInfo } from "@/lib/data/personal-info"
 
 export default function HeroSection() {
   const [showOverlay, setShowOverlay] = useState(true)
-  const [activeBlock, setActiveBlock] = useState<string | null>(null)
 
-  const handleBlockClick = (category: string) => {
-    setActiveBlock(category)
-    setTimeout(() => {
-      document.getElementById("projects")?.scrollIntoView({
-        behavior: "smooth",
-      })
-    }, 500)
-  }
+
+
 
   const scrollToAbout = () => {
     document.getElementById("about")?.scrollIntoView({
@@ -62,7 +52,7 @@ export default function HeroSection() {
           {/* Desktop Layout */}
           <div className="hidden lg:block">
             <div className="max-w-7xl mx-auto px-8 min-h-screen">
-              <div className="grid lg:grid-cols-2 min-h-screen items-center gap-16">
+              <div className="flex min-h-screen items-center justify-center">
                 {/* Left Content */}
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
@@ -152,15 +142,7 @@ export default function HeroSection() {
                   </motion.div>
                 </motion.div>
 
-                {/* Right 3D Visualization */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                  className="h-[600px] w-full"
-                >
-                  <BlockchainVisualization onBlockClick={handleBlockClick} activeBlock={activeBlock} />
-                </motion.div>
+
               </div>
             </div>
           </div>
@@ -247,17 +229,7 @@ export default function HeroSection() {
               </motion.div>
             </div>
 
-            {/* Mobile 3D Visualization */}
-            <div className="h-[300px] sm:h-[400px] md:h-[500px] px-4 sm:px-6">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="h-full w-full"
-              >
-                <BlockchainVisualization onBlockClick={handleBlockClick} activeBlock={activeBlock} />
-              </motion.div>
-            </div>
+
           </div>
         </div>
 
